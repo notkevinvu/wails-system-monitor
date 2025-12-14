@@ -2,11 +2,23 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Quick Start
+
+**Read `docs/SESSION_SUMMARY.md` first** for current project state, recent work, and next steps.
+
 ## Project Overview
 
-This is a Go learning project with two main components:
-1. **Go language examples** - Standalone Go files teaching language fundamentals (root directory)
-2. **Wails desktop application** - A Go + Web frontend desktop app (`wails-app/` directory)
+**System Monitor Overlay** - A desktop app displaying real-time CPU/memory charts as a transparent overlay.
+
+Built with:
+- **Go** + **Wails v2** (desktop framework)
+- **gopsutil** (system metrics)
+- **Vanilla JS** frontend with charts
+
+### Repository Structure
+1. **Go language examples** - Learning files in root (`basics/`, `concurrency/`, etc.)
+2. **Wails desktop application** - Main app in `wails-app/`
+3. **Documentation** - Architecture, features, research in `docs/`
 
 ## Commands
 
