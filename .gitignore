@@ -1,0 +1,39 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go build artifacts
+*.o
+*.a
+*.test
+
+# Go coverage
+*.out
+coverage.html
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Wails build output
+wails-app/build/bin/
+
+# Node modules
+node_modules/
+
+# Frontend dist (generated)
+wails-app/frontend/dist/
+!wails-app/frontend/dist/gitkeep
+
+# Environment files
+.env
+.env.local
