@@ -88,8 +88,14 @@ const result = await Greet("World");
 ### Parallel Agents
 When the user requests parallel agents, immediately spawn multiple concurrent agents using the Task tool with multiple tool calls in a single message.
 
+### Clarifying Questions
+When asking clarifying questions, always use the AskUserQuestion tool to present options in the answer picker UI. Do not list questions as plain text.
+
 ### Feature Development
 When using `/feature-dev`, leverage `/full-pr-review` for the PR review phase rather than basic review commands.
+
+### Commit Strategy
+Commit work in logical chunks for easier commit history digestion. Before moving to the PR review phase in `/feature-dev`, ensure all work is committed in logical, digestible chunks. Each commit should represent a coherent unit of change.
 
 ## Custom Slash Commands
 
