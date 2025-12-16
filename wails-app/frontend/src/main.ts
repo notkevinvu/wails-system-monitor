@@ -4,63 +4,72 @@ import './app.css';
 import logo from './assets/images/logo-universal.png';
 import { Greet, GetItems } from '../wailsjs/go/main/App';
 
-// Build the UI using safe DOM methods with strict null checks
+// Helper function to create and configure DOM elements
+function createElement<K extends keyof HTMLElementTagNameMap>(
+  tag: K,
+  attrs: Partial<HTMLElementTagNameMap[K]> & { parent?: HTMLElement }
+): HTMLElementTagNameMap[K] {
+  const el = document.createElement(tag);
+  const { parent, ...rest } = attrs;
+  Object.assign(el, rest);
+  parent?.appendChild(el);
+  return el;
+}
+
+// Helper function for consistent error handling
+function handleError(err: unknown, target: HTMLElement, action: string): void {
+  console.error(err);
+  target.textContent = `Error: Could not ${action}. Please try again.`;
+}
+
+// Initialize app container with null check
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) {
   throw new Error('App container element not found');
 }
 
-const logoImg = document.createElement('img');
-logoImg.id = 'logo';
-logoImg.className = 'logo';
-logoImg.src = logo;
-app.appendChild(logoImg);
+// Build UI using helper function
+const logoImg = createElement('img', { id: 'logo', className: 'logo', src: logo, parent: app });
 
-const resultDiv = document.createElement('div');
-resultDiv.className = 'result';
-resultDiv.id = 'result';
-resultDiv.textContent = 'Please enter your name below';
-app.appendChild(resultDiv);
+const resultDiv = createElement('div', {
+  className: 'result',
+  id: 'result',
+  textContent: 'Please enter your name below',
+  parent: app
+});
 
-const inputBox = document.createElement('div');
-inputBox.className = 'input-box';
-inputBox.id = 'input';
+const inputBox = createElement('div', { className: 'input-box', id: 'input', parent: app });
 
-const nameInput = document.createElement('input');
-nameInput.className = 'input';
-nameInput.id = 'name';
-nameInput.type = 'text';
-nameInput.autocomplete = 'off';
-inputBox.appendChild(nameInput);
+const nameInput = createElement('input', {
+  className: 'input',
+  id: 'name',
+  type: 'text',
+  autocomplete: 'off',
+  parent: inputBox
+});
 
-const greetBtn = document.createElement('button');
-greetBtn.className = 'btn';
-greetBtn.textContent = 'Greet';
+const greetBtn = createElement('button', {
+  className: 'btn',
+  textContent: 'Greet',
+  parent: inputBox
+});
 greetBtn.addEventListener('click', greet);
-inputBox.appendChild(greetBtn);
-
-app.appendChild(inputBox);
 
 // Items section
-const itemsSection = document.createElement('div');
-itemsSection.style.marginTop = '20px';
+const itemsSection = createElement('div', { className: 'items-section', parent: app });
 
-const itemsBtn = document.createElement('button');
-itemsBtn.className = 'btn';
-itemsBtn.textContent = 'Get Items from Go';
+const itemsBtn = createElement('button', {
+  className: 'btn',
+  textContent: 'Get Items from Go',
+  parent: itemsSection
+});
 itemsBtn.addEventListener('click', fetchItems);
-itemsSection.appendChild(itemsBtn);
 
-const itemsList = document.createElement('div');
-itemsList.id = 'items-list';
-itemsList.style.marginTop = '10px';
-itemsSection.appendChild(itemsList);
-
-app.appendChild(itemsSection);
+const itemsList = createElement('div', { className: 'items-list', parent: itemsSection });
 
 nameInput.focus();
 
-// Greet function - calls Go backend with async/await
+// Greet function - calls Go backend
 async function greet(): Promise<void> {
   const name = nameInput.value.trim();
   if (name === '') return;
@@ -69,20 +78,16 @@ async function greet(): Promise<void> {
     const result = await Greet(name);
     resultDiv.textContent = result;
   } catch (err) {
-    console.error(err);
-    resultDiv.textContent = 'Error: Could not greet. Please try again.';
+    handleError(err, resultDiv, 'greet');
   }
 }
 
-// FetchItems function - gets list from Go backend with async/await
+// FetchItems function - gets list from Go backend
 async function fetchItems(): Promise<void> {
   try {
     const items = await GetItems();
-
-    // Clear existing items
     itemsList.textContent = '';
 
-    // Build list using safe DOM methods
     const ul = document.createElement('ul');
     items.forEach((item) => {
       const li = document.createElement('li');
@@ -91,7 +96,6 @@ async function fetchItems(): Promise<void> {
     });
     itemsList.appendChild(ul);
   } catch (err) {
-    console.error(err);
-    itemsList.textContent = 'Error: Could not fetch items. Please try again.';
+    handleError(err, itemsList, 'fetch items');
   }
 }
