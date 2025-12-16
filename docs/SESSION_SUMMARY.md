@@ -8,7 +8,7 @@
 ## Project Overview
 
 **What**: System monitor overlay desktop app
-**Stack**: Go + Wails v2 + Vanilla JS + gopsutil
+**Stack**: Go + Wails v2 + TypeScript + gopsutil
 **Repo**: https://github.com/notkevinvu/wails-system-monitor
 
 ---
@@ -46,7 +46,7 @@
 |------|---------|
 | `wails-app/main.go` | App entry, Wails options |
 | `wails-app/app.go` | App struct, lifecycle, bindings (Greet, GetItems) |
-| `wails-app/frontend/src/main.js` | Frontend entry, UI building |
+| `wails-app/frontend/src/main.ts` | Frontend entry, UI building (TypeScript) |
 | `scripts/start-wails-dev.bat` | Launch dev server from anywhere |
 | `.claude/commands/*.md` | Custom slash commands |
 | `docs/HELPERS.md` | Helper scripts documentation |
@@ -58,6 +58,7 @@
 ## Technical Decisions
 
 - **Wails v2** (not v3) - v3 is alpha, v2 is stable
+- **TypeScript** (strict mode) - Type-safe frontend with async/await
 - **gopsutil** - Cross-platform metrics without cgo
 - **Event streaming** - Push metrics via events, not polling
 - **Bounded history** - Keep 60 data points max in memory

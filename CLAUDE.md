@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Built with:
 - **Go** + **Wails v2** (desktop framework)
 - **gopsutil** (system metrics)
-- **Vanilla JS** frontend with charts
+- **TypeScript** frontend (strict mode, async/await)
 
 ### Repository Structure
 1. **Go language examples** - Learning files in root (`basics/`, `concurrency/`, etc.)
@@ -62,8 +62,9 @@ The Wails app follows the standard Wails v2 pattern:
 
 - **`main.go`** - Application entry point, configures Wails options, embeds frontend assets via `//go:embed`
 - **`app.go`** - Contains the `App` struct with methods exposed to the frontend via `Bind`
-- **`frontend/`** - Vanilla JS frontend using Vite
-  - `wailsjs/go/main/App.js` - Auto-generated bindings to call Go methods from JS
+- **`frontend/`** - TypeScript frontend using Vite
+  - `src/main.ts` - Main entry point with strict TypeScript
+  - `wailsjs/go/main/App.js` - Auto-generated bindings to call Go methods
   - `wailsjs/runtime/` - Wails runtime for frontend-backend communication
 
 ### Go-Frontend Binding
@@ -88,8 +89,14 @@ const result = await Greet("World");
 ### Parallel Agents
 When the user requests parallel agents, immediately spawn multiple concurrent agents using the Task tool with multiple tool calls in a single message.
 
+### Clarifying Questions
+When asking clarifying questions, always use the AskUserQuestion tool to present options in the answer picker UI. Do not list questions as plain text.
+
 ### Feature Development
 When using `/feature-dev`, leverage `/full-pr-review` for the PR review phase rather than basic review commands.
+
+### Commit Strategy
+Commit work in logical chunks for easier commit history digestion. Before moving to the PR review phase in `/feature-dev`, ensure all work is committed in logical, digestible chunks. Each commit should represent a coherent unit of change.
 
 ## Custom Slash Commands
 
