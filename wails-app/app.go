@@ -25,3 +25,8 @@ func (a *App) startup(ctx context.Context) {
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
+
+// GetItems returns a list of sample items
+func (a *App) GetItems() []string {
+	return []string{"Apple", "Banana", "Cherry", "Date", "Elderberry"}
+}

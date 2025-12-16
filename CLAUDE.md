@@ -77,3 +77,47 @@ func (a *App) Greet(name string) string { ... }
 import { Greet } from '../wailsjs/go/main/App';
 const result = await Greet("World");
 ```
+
+## Workflow Requirements
+
+### PR Handling
+- **Always include PR links**: When working with PRs, the final line(s) of any response MUST include link(s) to the PR(s) being handled
+- **Feature/bugfix branches**: Always run `/full-pr-review` when working with feature or bugfix branches
+- **Documentation-only changes**: Do not require full PR review workflow
+
+### Parallel Agents
+When the user requests parallel agents, immediately spawn multiple concurrent agents using the Task tool with multiple tool calls in a single message.
+
+### Feature Development
+When using `/feature-dev`, leverage `/full-pr-review` for the PR review phase rather than basic review commands.
+
+## Custom Slash Commands
+
+Located in `.claude/commands/`:
+
+| Command | Purpose |
+|---------|---------|
+| `/sync-main` | Switch to main branch and pull latest from remote |
+| `/full-pr-review` | Complete PR workflow: create, review, fix, CI check, document |
+| `/update-session` | Update `docs/SESSION_SUMMARY.md` with recent work and next steps |
+
+### /full-pr-review Workflow
+1. Create PR with descriptive title/summary
+2. Run PR review and post findings as comment
+3. Fix critical/major issues (always), minor issues (if quick or no major issues)
+4. Second review cycle with fixes
+5. Monitor CI and fix failures
+6. Update related docs
+7. Report summary with PR link(s) as final line
+
+**Max 2 review-fix cycles** without additional prompting.
+
+## Helper Scripts
+
+Located in `scripts/`:
+
+| Script | Purpose |
+|--------|---------|
+| `start-wails-dev.bat` | Launch Wails dev server from any location |
+
+See `docs/HELPERS.md` for full documentation.

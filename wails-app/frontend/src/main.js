@@ -2,42 +2,92 @@ import './style.css';
 import './app.css';
 
 import logo from './assets/images/logo-universal.png';
-import {Greet} from '../wailsjs/go/main/App';
+import {Greet, GetItems} from '../wailsjs/go/main/App';
 
-document.querySelector('#app').innerHTML = `
-    <img id="logo" class="logo">
-      <div class="result" id="result">Please enter your name below 👇</div>
-      <div class="input-box" id="input">
-        <input class="input" id="name" type="text" autocomplete="off" />
-        <button class="btn" onclick="greet()">Greet</button>
-      </div>
-    </div>
-`;
-document.getElementById('logo').src = logo;
+// Build the UI using safe DOM methods
+const app = document.querySelector('#app');
 
-let nameElement = document.getElementById("name");
-nameElement.focus();
-let resultElement = document.getElementById("result");
+const logoImg = document.createElement('img');
+logoImg.id = 'logo';
+logoImg.className = 'logo';
+logoImg.src = logo;
+app.appendChild(logoImg);
 
-// Setup the greet function
-window.greet = function () {
-    // Get name
-    let name = nameElement.value;
+const resultDiv = document.createElement('div');
+resultDiv.className = 'result';
+resultDiv.id = 'result';
+resultDiv.textContent = 'Please enter your name below';
+app.appendChild(resultDiv);
 
-    // Check if the input is empty
+const inputBox = document.createElement('div');
+inputBox.className = 'input-box';
+inputBox.id = 'input';
+
+const nameInput = document.createElement('input');
+nameInput.className = 'input';
+nameInput.id = 'name';
+nameInput.type = 'text';
+nameInput.autocomplete = 'off';
+inputBox.appendChild(nameInput);
+
+const greetBtn = document.createElement('button');
+greetBtn.className = 'btn';
+greetBtn.textContent = 'Greet';
+greetBtn.addEventListener('click', greet);
+inputBox.appendChild(greetBtn);
+
+app.appendChild(inputBox);
+
+// Items section
+const itemsSection = document.createElement('div');
+itemsSection.style.marginTop = '20px';
+
+const itemsBtn = document.createElement('button');
+itemsBtn.className = 'btn';
+itemsBtn.textContent = 'Get Items from Go';
+itemsBtn.addEventListener('click', fetchItems);
+itemsSection.appendChild(itemsBtn);
+
+const itemsList = document.createElement('div');
+itemsList.id = 'items-list';
+itemsList.style.marginTop = '10px';
+itemsSection.appendChild(itemsList);
+
+app.appendChild(itemsSection);
+
+nameInput.focus();
+
+// Greet function - calls Go backend
+function greet() {
+    const name = nameInput.value;
     if (name === "") return;
 
-    // Call App.Greet(name)
-    try {
-        Greet(name)
-            .then((result) => {
-                // Update result with data back from App.Greet()
-                resultElement.innerText = result;
-            })
-            .catch((err) => {
-                console.error(err);
+    Greet(name)
+        .then((result) => {
+            resultDiv.textContent = result;
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+}
+
+// FetchItems function - gets list from Go backend
+function fetchItems() {
+    GetItems()
+        .then((items) => {
+            // Clear existing items
+            itemsList.textContent = '';
+
+            // Build list using safe DOM methods
+            const ul = document.createElement('ul');
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                ul.appendChild(li);
             });
-    } catch (err) {
-        console.error(err);
-    }
-};
+            itemsList.appendChild(ul);
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+}
