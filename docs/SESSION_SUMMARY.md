@@ -15,17 +15,17 @@
 
 ## Recently Completed
 
-1. **Project Setup** - Initialized git repo, created GitHub remote, established `main` branch
-2. **Documentation Structure** - Created `docs/` with architecture, features, requirements, and research
-3. **Go Desktop Research** - Documented best practices for Go desktop apps vs backend (see `docs/research/GO_DESKTOP_BEST_PRACTICES.md`)
-4. **Project Direction** - Decided on system monitor overlay concept with real-time charts
+1. **Go-JS Data Binding Demo** - Added `GetItems()` function in Go with frontend button to fetch/display list
+2. **Claude Workflow Commands** - Created `/sync-main`, `/full-pr-review`, `/update-session` slash commands
+3. **Developer Experience** - Added `scripts/start-wails-dev.bat` for easy dev server launch from anywhere
 
 ---
 
 ## Current State
 
-- Base Wails v2 "Hello World" scaffold exists in `wails-app/`
+- Wails v2 app with working Go-JS data binding (`Greet`, `GetItems`)
 - Go learning examples in root folders (basics, concurrency, etc.)
+- Claude workflow automation via custom slash commands
 - No metrics collection implemented yet
 - No overlay window configuration yet
 
@@ -45,8 +45,11 @@
 | File | Purpose |
 |------|---------|
 | `wails-app/main.go` | App entry, Wails options |
-| `wails-app/app.go` | App struct, lifecycle, bindings |
-| `wails-app/frontend/src/main.js` | Frontend entry |
+| `wails-app/app.go` | App struct, lifecycle, bindings (Greet, GetItems) |
+| `wails-app/frontend/src/main.js` | Frontend entry, UI building |
+| `scripts/start-wails-dev.bat` | Launch dev server from anywhere |
+| `.claude/commands/*.md` | Custom slash commands |
+| `docs/HELPERS.md` | Helper scripts documentation |
 | `docs/ARCHITECTURE.md` | System design |
 | `docs/FEATURES.md` | Feature checklist |
 
@@ -64,7 +67,10 @@
 ## Commands
 
 ```bash
-# Development
+# Development (easy way)
+scripts\start-wails-dev.bat
+
+# Development (manual)
 cd wails-app && wails dev
 
 # Build
@@ -73,3 +79,11 @@ cd wails-app && wails build
 # Run Go examples
 go run basics/variables.go
 ```
+
+### Claude Slash Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/sync-main` | Switch to main and pull latest |
+| `/full-pr-review` | Complete PR workflow with review cycles |
+| `/update-session` | Update this SESSION_SUMMARY.md |
