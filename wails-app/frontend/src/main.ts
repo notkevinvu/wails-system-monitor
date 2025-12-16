@@ -2,10 +2,13 @@ import './style.css';
 import './app.css';
 
 import logo from './assets/images/logo-universal.png';
-import {Greet, GetItems} from '../wailsjs/go/main/App';
+import { Greet, GetItems } from '../wailsjs/go/main/App';
 
-// Build the UI using safe DOM methods
-const app = document.querySelector('#app');
+// Build the UI using safe DOM methods with strict null checks
+const app = document.querySelector<HTMLDivElement>('#app');
+if (!app) {
+  throw new Error('App container element not found');
+}
 
 const logoImg = document.createElement('img');
 logoImg.id = 'logo';
@@ -57,39 +60,38 @@ app.appendChild(itemsSection);
 
 nameInput.focus();
 
-// Greet function - calls Go backend
-function greet() {
-    const name = nameInput.value.trim();
-    if (name === "") return;
+// Greet function - calls Go backend with async/await
+async function greet(): Promise<void> {
+  const name = nameInput.value.trim();
+  if (name === '') return;
 
-    Greet(name)
-        .then((result) => {
-            resultDiv.textContent = result;
-        })
-        .catch((err) => {
-            console.error(err);
-            resultDiv.textContent = 'Error: Could not greet. Please try again.';
-        });
+  try {
+    const result = await Greet(name);
+    resultDiv.textContent = result;
+  } catch (err) {
+    console.error(err);
+    resultDiv.textContent = 'Error: Could not greet. Please try again.';
+  }
 }
 
-// FetchItems function - gets list from Go backend
-function fetchItems() {
-    GetItems()
-        .then((items) => {
-            // Clear existing items
-            itemsList.textContent = '';
+// FetchItems function - gets list from Go backend with async/await
+async function fetchItems(): Promise<void> {
+  try {
+    const items = await GetItems();
 
-            // Build list using safe DOM methods
-            const ul = document.createElement('ul');
-            items.forEach(item => {
-                const li = document.createElement('li');
-                li.textContent = item;
-                ul.appendChild(li);
-            });
-            itemsList.appendChild(ul);
-        })
-        .catch((err) => {
-            console.error(err);
-            itemsList.textContent = 'Error: Could not fetch items. Please try again.';
-        });
+    // Clear existing items
+    itemsList.textContent = '';
+
+    // Build list using safe DOM methods
+    const ul = document.createElement('ul');
+    items.forEach((item) => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+    itemsList.appendChild(ul);
+  } catch (err) {
+    console.error(err);
+    itemsList.textContent = 'Error: Could not fetch items. Please try again.';
+  }
 }
