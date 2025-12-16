@@ -17,10 +17,11 @@ Comprehensive PR creation, review, and fix workflow. Maximum of 2 review-fix cyc
    - **Critical issues**: Must be fixed
    - **Major issues**: Must be fixed
    - **Minor issues**: Fix if quick/simple, or if no critical/major issues exist
-3. Post a comment on the PR with:
+3. **IMPORTANT: Post comment BEFORE fixing** - Post a comment on the PR with:
    - Overall review summary
    - Critical/Major/Minor issues with explanatory descriptions
    - Recommended next steps
+   - This documents what was found so fixes can be verified after the fact
 
 ### Phase 3: Fix Issues (Cycle 1)
 1. **Always fix**: All critical and major issues
@@ -32,7 +33,7 @@ Comprehensive PR creation, review, and fix workflow. Maximum of 2 review-fix cyc
 
 ### Phase 4: Second PR Review
 1. Re-run `/pr-review-toolkit:review-pr`
-2. Post another comment on the PR with updated findings
+2. **Post comment BEFORE fixing** - Post another comment on the PR with updated findings
 3. Fix any new issues that arose from the fixes (same rules as Phase 3)
 
 ### Phase 5: CI Monitoring
