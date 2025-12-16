@@ -59,7 +59,7 @@ nameInput.focus();
 
 // Greet function - calls Go backend
 function greet() {
-    const name = nameInput.value;
+    const name = nameInput.value.trim();
     if (name === "") return;
 
     Greet(name)
@@ -68,6 +68,7 @@ function greet() {
         })
         .catch((err) => {
             console.error(err);
+            resultDiv.textContent = 'Error: Could not greet. Please try again.';
         });
 }
 
@@ -89,5 +90,6 @@ function fetchItems() {
         })
         .catch((err) => {
             console.error(err);
+            itemsList.textContent = 'Error: Could not fetch items. Please try again.';
         });
 }
